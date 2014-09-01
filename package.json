@@ -1,0 +1,10 @@
+{
+    "name": "exp-css",
+    "description": "Css Plugin for Expansive",
+    "version": "0.1.0",
+    "keywords": [
+        "expansive-plugin",
+        "css"
+    ],
+    "licenses": "GPL",
+}
