@@ -1,4 +1,4 @@
 exp-css License
 ===
 
-[MIT](http://opensource.org/licenses/MIT)
+[GPL](http://www.gnu.org/licenses/gpl-2.0.html)
