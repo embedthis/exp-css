@@ -7,8 +7,8 @@ Expansive.load({
     expansive: {
         transforms: [{
             name:   'prefix-css',
-            from:   'css',
-            to:     'css',
+            input:  'css',
+            output: 'css',
             script: `
                 function transform(contents, meta, service) {
                     let autoprefixer = Cmd.locate('autoprefixer', 
@@ -23,8 +23,8 @@ Expansive.load({
             `
         }, {
             name:   'minify-css',
-            from:   'css',
-            to:     'css',
+            input:  'css',
+            output: 'css',
             script: `
                 function transform(contents, meta, service) {
                     let less = Cmd.locate('lessc', [ searchPak('exp-lessc').join('node_modules/less/bin') ])
