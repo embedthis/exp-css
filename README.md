@@ -7,7 +7,7 @@ Provides the 'minify-css' and 'prefix-css' services.
 
 ### To install:
 
-exp install exp-css
+exp install css
 
 ### Get Pak from
 
