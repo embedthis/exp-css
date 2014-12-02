@@ -29,7 +29,7 @@ Expansive.load({
                 function transform(contents, meta, service) {
                     let less = Cmd.locate('lessc', [ searchPak('exp-lessc').join('node_modules/less/bin') ])
                     if (less) {
-                        let results = runFile(less + ' --clean-css - ', contents, meta)
+                        let results = run(less + ' --clean-css - ', contents, meta)
                         contents = results
                     } else {
                         let recess = Cmd.locate('recess', [ searchPak('exp-recess').join('node_modules/recess/bin') ])
