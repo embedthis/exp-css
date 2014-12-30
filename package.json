@@ -1,10 +1,18 @@
 {
     "name": "exp-css",
     "description": "Css Plugin for Expansive",
-    "version": "0.1.0",
+    "version": "0.2.0",
+    "pak": ">=0.10",
     "keywords": [
         "expansive-plugin",
         "css"
     ],
     "licenses": "GPL",
+    "scripts": {
+        "postcache": [
+            { "script": "Cmd.locate('autoprefixer') || run('npm install -g autoprefixer')" },
+            { "script": "Cmd.locate('less') || run('npm install -g less')" }
+        ]
+    },
+    "install": false
 }
