@@ -39,7 +39,7 @@ Expansive.load({
                         if (results == '') {
                             /* Failed, run again to get diagnostics - Ugh! */
                             results = runFile(recess, contents, meta)
-                            throw 'Failed to parse less file with recess ' + meta.file + '\n' + results + '\n'
+                            throw 'Failed to parse less file with recess ' + meta.source + '\n' + results + '\n'
                         }
                         contents = results
                     } else {
