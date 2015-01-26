@@ -11,8 +11,8 @@ Provides the 'minify-css' and 'prefix-css' services.
 
 ### To configure in expansive.json:
 
-* minify-css.enable -- Set to true to minify CSS files using lessc.
-* prefix-css.enable -- Set to true to enable running autoprefixer on CSS files.
+* minify-css.enable &mdash; Set to true to minify CSS files using lessc.
+* prefix-css.enable &mdash; Set to true to enable running autoprefixer on CSS files.
 
 
 ```
