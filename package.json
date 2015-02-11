@@ -2,17 +2,23 @@
     "name": "exp-css",
     "description": "Css Plugin for Expansive",
     "version": "0.2.0",
-    "pak": ">=0.10",
     "keywords": [
         "expansive-plugin",
         "css"
     ],
     "licenses": "GPL",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/embedthis/exp-css.git"
+    },
     "scripts": {
         "postcache": [
             { "script": "Cmd.locate('autoprefixer') || run('npm install -g autoprefixer')" },
             { "script": "Cmd.locate('less') || run('npm install -g less')" }
         ]
     },
-    "install": false
+    "pak": {
+        "install": false,
+        "version": ">=0.10"
+    }
 }
