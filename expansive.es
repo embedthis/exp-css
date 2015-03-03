@@ -19,21 +19,20 @@ Expansive.load({
             }
         `
     }, {
-        name:     'minify-css',
+        name:     'render-css',
         files:    null,
         mappings: {
             'css',
-            'min.css'
+            'min.css',
+            'css.map'
         },
-        usemin: true,
-
-        minify: false,
-        dotmin: true,
+        usemap: true,
+        usemin: null,
 
         script: `
-            function init() {
+            function initRenderStyles() {
                 let directories = expansive.directories
-                let service = expansive.services['minify-css']
+                let service = expansive.services['render-css']
                 let collections = expansive.control.collections
                 /*
                     Build list of stylesheets to render. Must be in pak dependency order.
@@ -45,41 +44,31 @@ Expansive.load({
                 } else {
                     let list = expansive.directories.top.files(expansive.control.documents, 
                         {directories: false, relative: true})
-                    list = list.filter(function(path) path.glob('**.css'))
-                    files = []
-                    /* Sort files by pak dependency order */
-                    for each (pak in expansive.pakList) {
-                        let path = directories.lib.join(pak)
-                        let json = directories.paks.join(pak, 'package.json').readJSON()
-                        let explicitRender = (json && json.pak && json.pak.render) ? json.pak.render.css : null
-                        for each (file in list) {
-                            if (file.startsWith(path)) {
-                                if (!explicitRender) {
-                                    files.push(file)
-                                }
-                            }
-                        }
-                        if (explicitRender) {
-                            /* Expand first to permit ${TOP} which is absolute to override directories.lib */
-                            for (let [key,value] in explicitRender) {
-                                explicitRender[key] = value.expand(expansive.dirTokens, { fill: '.' })
-                            }
-                            let render = directories.lib.join(pak).files(explicitRender, {relative: true})
-                            for each (path in render) {
-                                files.push(directories.lib.join(pak, path).relative)
-                            }
-                        }
-                    }
+                    list = list.filter(function(path) path.glob(['**.css', '**.css.map']))
+                    files = expansive.orderFiles(list, "css")
                 }
                 files = files.unique()
 
+                /*
+                    Save instructions for minify-css in the service.hash
+                    Update the styles collection for use by renderStyles()
+                 */
                 let styles = []
-                service.hash = {}
+                let minify = expansive.services['minify-css']
                 let style = null
+                service.hash = {}
                 for each (file in files) {
                     let ext = file.extension
-                    if (file.endsWith('min.css')) {
-                        if (service.usemin) {
+                    if (ext == 'map') {
+                        if (service.usemap) {
+                            service.hash[file.name] = true
+                        } else {
+                            service.hash[file.name] = 'not required because "usemap" is false.'
+                        }
+                    } else if (file.endsWith('min.css')) {
+                        if (service.usemin ||
+                           (service.usemin !== false && service.usemap && 
+                                file.trimEnd('.min.css').joinExt('css.map').exists)) {
                             service.hash[file.name] = true
                             style = file
                         } else {
@@ -89,9 +78,17 @@ Expansive.load({
                         let minified = file.replaceExt('min.css')
                         if (service.usemin && minified.exists) {
                             service.hash[file.name] = 'not required because ' + file.replaceExt('min.css') + ' exists.'
-                        } else if (service.minify) {
-                            service.hash[file.name] = { minify: true }
-                            style = file
+                        } else {
+                            let mapped = file.replaceExt('min.map')
+                            if (service.usemap && mapped.exists && minified.exists) {
+                                service.hash[file.name] = 'not required because ' + file.replaceExt('min.js') + ' exists.'
+                            } else if (minify.minify) {
+                                service.hash[file.name] = { minify: true }
+                                style = file
+                            } else {
+                                service.hash[file.name] = true
+                                style = file
+                            }
                         }
                     }
                     if (style) {
@@ -100,15 +97,32 @@ Expansive.load({
                 }
                 collections.styles = styles + (collections.styles || [])
             }
-            init()
+            initRenderStyles()
 
+            public function renderStyles() {
+                let styles = (expansive.collections.styles || [])
+                for each (style in styles) {
+                    write('<link href="' + meta.top + style + '" rel="stylesheet" type="text/css" />\n    ')
+                }
+            }
+        `
+    }, {
+        name:     'minify-css',
+        mappings: {
+            'css',
+            'min.css'
+        },
+        minify: false,
+        dotmin: true,
+
+        script: `
             function transform(contents, meta, service) {
-                let instructions = service.hash[meta.source]
+                let instructions = expansive.services['render-css'].hash[meta.source]
                 if (!instructions) {
                     return contents
                 }
                 if (instructions is String) {
-                    vtrace('Info', meta.file + ' ' + instructions)
+                    vtrace('Info', meta.path + ' ' + instructions)
                     return null
                 }
                 if (instructions.minify) {
@@ -132,18 +146,11 @@ Expansive.load({
                             trace('Warn', 'Cannot find lessc or recess')
                         }
                     }
-                    if (service.dotmin && !meta.document.contains('min.css')) {
-                        meta.document = meta.document.trimExt().joinExt('min.css', true)
+                    if (service.dotmin && !meta.dest.contains('min.css')) {
+                        meta.dest = meta.dest.trimExt().joinExt('min.css', true)
                     }
                 }
                 return contents
-            }
-
-            public function renderStyles() {
-                let styles = (expansive.collections.styles || [])
-                for each (style in styles) {
-                    write('<link href="' + meta.top + style + '" rel="stylesheet" type="text/css" />\n    ')
-                }
             }
         `
     }]
