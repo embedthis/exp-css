@@ -44,7 +44,7 @@ Expansive.load({
                 } else {
                     let list = expansive.directories.top.files(expansive.control.documents, 
                         {directories: false, relative: true})
-                    list = list.filter(function(path) path.glob(['**.css', '**.css.map']))
+                    list = list.filter(function(path) path.glob(['**/*.css', '**.css.map']))
                     files = expansive.orderFiles(list, "css")
                 }
                 files = files.unique()
@@ -55,9 +55,9 @@ Expansive.load({
                  */
                 let styles = []
                 let minify = expansive.services['minify-css']
-                let style = null
                 service.hash = {}
                 for each (file in files) {
+                    let style = null
                     let ext = file.extension
                     if (ext == 'map') {
                         if (service.usemap) {
@@ -96,6 +96,11 @@ Expansive.load({
                     }
                 }
                 collections.styles = styles + (collections.styles || [])
+                if (expansive.options.debug) {
+                    print("EXP_CSS", "usemap", service.usemap, "usemin", service.usemin, "minify", service.minify)
+                    dump("EXP-CSS HASH", service.hash)
+                    dump("EXP-CSS COLLECTIONS", collections)
+                }
             }
             initRenderStyles()
 
