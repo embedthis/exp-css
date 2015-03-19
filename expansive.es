@@ -80,7 +80,8 @@ Expansive.load({
                             service.hash[file.name] = 'not required because ' + file.replaceExt('min.css') + ' exists.'
                         } else {
                             let mapped = file.replaceExt('min.map')
-                            if (service.usemap && mapped.exists && minified.exists) {
+                            if (service.usemap && minified.exists &&
+                                (file.replaceExt('min.map').exists || file.replaceExt('css.map'))) {
                                 service.hash[file.name] = 'not required because ' + file.replaceExt('min.js') + ' exists.'
                             } else if (minify.minify) {
                                 service.hash[file.name] = { minify: true }
