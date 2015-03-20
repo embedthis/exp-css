@@ -77,12 +77,12 @@ Expansive.load({
                     } else if (ext == 'css') {
                         let minified = file.replaceExt('min.css')
                         if (service.usemin && minified.exists) {
-                            service.hash[file.name] = 'not required because ' + file.replaceExt('min.css') + ' exists.'
+                            service.hash[file.name] = 'not required because ' + minified + ' exists.'
                         } else {
                             let mapped = file.replaceExt('min.map')
                             if (service.usemap && minified.exists &&
-                                (file.replaceExt('min.map').exists || file.replaceExt('css.map'))) {
-                                service.hash[file.name] = 'not required because ' + file.replaceExt('min.js') + ' exists.'
+                                (file.replaceExt('min.map').exists || file.replaceExt('css.map').exists)) {
+                                service.hash[file.name] = 'not required because ' + minified + ' exists.'
                             } else if (minify.minify) {
                                 service.hash[file.name] = { minify: true }
                                 style = file
@@ -105,10 +105,20 @@ Expansive.load({
             }
             initRenderStyles()
 
-            public function renderStyles() {
-                let styles = (expansive.collections.styles || [])
-                for each (style in styles) {
+            public function renderStyles(filter, extras = []) {
+                let styles = (expansive.collections.styles || []) + extras
+                for each (style in styles.unique()) {
+                    if (filter && !Path(style).glob(filter)) {
+                        continue
+                    }
                     write('<link href="' + meta.top + style + '" rel="stylesheet" type="text/css" />\n    ')
+                }
+                if (expansive.collections['inline-styles']) {
+                    write('<style>')
+                    for each (style in expansive.collections['inline-styles']) {
+                        write(style)
+                    }
+                    write('\n    </style>')
                 }
             }
         `

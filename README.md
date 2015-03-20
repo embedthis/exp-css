@@ -60,8 +60,15 @@ The minify-css service optimizes stylesheets by minifying to remove white-space,
 * dotmin &mdash; Use '.min.css' as the output file extension after minification. Otherwise will be
     '.css'.  Default to true.
 * enable &mdash; Enable minifying stylesheets. Default to true.
-* files &mdash; Array of files to minify. Files are relative to 'source'.
-* .minify &mdash; Enable minifying of Javascript files. Default to fals
+* mappings &mdash; Set of extensions to transform. Defaults to:
+```
+mappings: {
+    'css',
+    'min.css',
+    'css.map',
+}
+```
+* minify &mdash; Enable minifying of Javascript files. Default to false.
 
 ## Example
 
