@@ -1,7 +1,7 @@
 {
     "name": "exp-css",
-    "description": "Css Plugin for Expansive",
-    "version": "0.2.2",
+    "description": "CSS Plugin for Expansive",
+    "version": "0.2.3",
     "keywords": [
         "expansive-plugin",
         "css"
@@ -13,8 +13,12 @@
     },
     "scripts": {
         "postcache": [
-            { "script": "Cmd.locate('autoprefixer') || run('npm install -g autoprefixer')" },
-            { "script": "Cmd.locate('less') || run('npm install -g less')" }
+            {
+                "script": "if (!Cmd.locate('autoprefixer')) { if (!Cmd.locate('npm')) { throw 'Cannot locate the \"npm\" utility.' } else { run('npm install -g autoprefixer')}}"
+            },
+            {
+                "script": "if (!Cmd.locate('less')) { if (!Cmd.locate('npm')) { throw 'Cannot locate the \"npm\" utility.' } else { run('npm install -g less')}}"
+            }
         ]
     },
     "devDependencies": {
