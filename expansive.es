@@ -14,7 +14,7 @@ Expansive.load({
         dotmin:     true,
         files:      [ '**.css*', '!**.map', '!*.less*' ],
         force:      false,
-        extract:    true,
+        extract:    false,
         minify:     false,
         usemap:     true,
         usemin:     true,
@@ -68,7 +68,7 @@ Expansive.load({
                 } else {
                     let minified = vfile.replaceExt('min.css')
                     /*
-                        Minify if forced, or a suitable minfied version does not exist or !usemin
+                        Use this source file if forced+miify, or a suitable minfied version does not exist or !usemin
                      */                           
                     if ((service.minify && service.force) ||
                         !(minified.exists && service.usemin && (!service.usemap || vfile.replaceExt('css.map').exists))) {
@@ -217,7 +217,12 @@ Expansive.load({
                 if (extras && extras is String) {
                     extras = [extras]
                 }
-                extras += expansive.services['extract-css'].inlineStyles
+                if (expansive.services['extract-css'].states) {
+                    let extracted = expansive.services['extract-css'].states[meta.destPath]
+                    if (extracted && extracted.link) {
+                        extras.push(expansive.services.css.resolve(extracted.link, expansive.services.css))
+                    }
+                }
                 for each (style in extras) {
                     let uri = meta.top.join(style).trimStart('./')
                     write('<link href="' + uri + '" rel="stylesheet" type="text/css" />\n    ')
@@ -238,6 +243,7 @@ Expansive.load({
         script: `
             let service = expansive.services['extract-css']
             service.nextId = 0
+            service.states = {}
 
             /*
                 Local function to handle inline style elements
@@ -312,14 +318,12 @@ Expansive.load({
                 contents = handleStyleElements(contents, meta, state)
                 contents = handleStyleAttributes(contents, meta, state)
                 if (state.elements || state.attributes) {
-                    service.inlineStyles ||= []
-                    if (expansive.services.css.extract === true) {
-                        service.inlineStyles.push(meta.destPath.replaceExt('css'))
-                    } else {
-                        service.inlineStyles.push(expansive.services.css.extract)
-                    }
-                    service.states ||= {}
                     let ss = service.states[meta.destPath] ||= {}
+                    if (expansive.services.css.extract === true) {
+                        ss.link = meta.destPath.replaceExt('css')
+                    } else {
+                        ss.link = expansive.services.css.extract
+                    }
                     if (state.elements) {
                         ss.elements ||= []
                         ss.elements += state.elements

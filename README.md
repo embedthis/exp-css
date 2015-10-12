@@ -30,6 +30,8 @@ The **css** service provides configuration control for the other css services.
 * dotmin &mdash; Use '.min.css' as the output file extension after minification. Otherwise will be
     '.css'.  Default to true.
 * enable &mdash; Enable the service. Defaults to true.
+* extract &mdash; Extract inline syltes into external stylesheet. Defaults to to false. Set to true to enable or set
+    to a filename to contain all extracted styles.
 * force &mdash; Force minification even if a minified source file exists.
 * minify &mdash; Enable minifying of Javascript files. Default to false.
 * usemap &mdash; Use minified stylesheet if corresponding source maps is present. Defaults to true.
