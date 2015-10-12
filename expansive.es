@@ -283,8 +283,6 @@ Expansive.load({
                             id = '#' + ematches[1]
                         } else {
                             let service = expansive.services['extract-css']
-//  MOB - why md5
-                            // id = 'exp-' + md5(++service.nextId).slice(0, 8)
                             id = 'exp-' + ++service.nextId
                         }
                         state.attributes ||= {}
@@ -374,7 +372,6 @@ Expansive.load({
                     styles = renderContents(styles, meta)
                     writeDest(styles, meta)
                 }
-                delete service.states
             }
         `
     } ]
