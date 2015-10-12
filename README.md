@@ -19,6 +19,7 @@ Provides the following services
 * prefix-css
 * minify-css
 * render-css
+* extract-css
 
 ## css
 
@@ -58,6 +59,10 @@ The renderStyles API may be invoked with an argument can specify a set of patter
 ## minify-css
 
 The minify-css service optimizes stylesheets by minifying to remove white-space, managle names and otherwise compress the stylesheets. By default, the stylesheets use a '.css' extension, but will use a '.min.css' extension if the 'dotmin' option is enabled.
+
+## extract-css
+
+To support Content Security Policy headers, the extract-css service extracts inline styles into external Stylesheets. It will extract incline \<style> elements and style attributes into a per-page external stylesheet file. If the **extract** attribute is set to a filename, then all the styles will be placed in that file.
 
 ## Example
 
