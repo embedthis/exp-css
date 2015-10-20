@@ -16,10 +16,10 @@ The exp-css plugin provides build tooling for stylesheets. It provides the **css
 Provides the following transforms
 
 * css
-* css.prefix
-* css.minify
-* css.render
-* css.extract
+* css-prefix
+* css-minify
+* css-render
+* css-extract
 
 ## css
 
