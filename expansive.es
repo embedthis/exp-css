@@ -1,7 +1,7 @@
 /*
     expansive.es - Configuration for exp-css
 
-    Transform by prefixing and minifying. Uses autoprefixer and less.
+    Transform by prefixing and minifying. Uses postcss and less.
  */
 Expansive.load({
 
@@ -88,11 +88,11 @@ Expansive.load({
             name:       'prefix',
             mappings:   'css',
             render:     function(contents) {
-                let autoprefixer = Cmd.locate('autoprefixer')
-                if (autoprefixer) {
-                    contents = expansive.run(autoprefixer, contents)
+                let postcss = Cmd.locate('postcss')
+                if (postcss) {
+                    contents = expansive.run(postcss + ' --use autoprefixer', contents)
                 } else {
-                    trace('Warn', 'Cannot find autoprefixer')
+                    trace('Warn', 'Cannot find postcss')
                 }
                 return contents
             }
