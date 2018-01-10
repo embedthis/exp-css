@@ -25,6 +25,7 @@
                     "script": "npm('install -g', 'less')"
                 }
             ]
-        }
+        },
+        "origin": "embedthis/exp-css"
     }
 }
