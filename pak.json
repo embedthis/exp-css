@@ -15,17 +15,15 @@
         "expansive": ">=0.7.0",
         "pak": ">=0.11.3"
     },
-    "pak": {
-        "scripts": {
-            "postcache": [
-                {
-                    "script": "npm('install -g', 'autoprefixer')"
-                },
-                {
-                    "script": "npm('install -g', 'less')"
-                }
-            ]
-        },
-        "origin": "embedthis/exp-css"
-    }
+    "scripts": {
+        "postcache": [
+            {
+                "script": "npm('install -g', 'autoprefixer')"
+            },
+            {
+                "script": "npm('install -g', 'less')"
+            }
+        ]
+    },
+    "origin": "embedthis/exp-css"
 }
