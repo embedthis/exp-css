@@ -93,7 +93,7 @@ Expansive.load({
                 if (postcss) {
                     contents = expansive.run(postcss + ' --use autoprefixer', contents)
                 } else {
-                    trace('Warn', 'Cannot find postcss')
+                    throw new Error('Cannot find postcss')
                 }
                 return contents
             }
@@ -107,7 +107,7 @@ Expansive.load({
                 if (less) {
                     contents = expansive.run(less + ' --compress - ', contents, meta)
                 } else {
-                    trace('Warn', 'Cannot find lessc')
+                    thrown new Error('Cannot find lessc')
                 }
                 return contents
             }
