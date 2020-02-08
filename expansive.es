@@ -91,6 +91,8 @@ Expansive.load({
             render:     function(contents) {
                 let postcss = Cmd.locate('postcss')
                 if (postcss) {
+                    Cmd.run('npm install -g postcss')
+                    postcss = Cmd.locate('postcss')
                     contents = expansive.run(postcss + ' --use autoprefixer', contents)
                 } else {
                     throw new Error('Cannot find postcss')
@@ -105,6 +107,8 @@ Expansive.load({
                 trace('Minify', meta.current)
                 let less = Cmd.locate('lessc')
                 if (less) {
+                    Cmd.run('npm install -g lessc')
+                    less = Cmd.locate('lessc')
                     contents = expansive.run(less + ' --compress - ', contents, meta)
                 } else {
                     thrown new Error('Cannot find lessc')
