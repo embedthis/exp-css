@@ -91,7 +91,7 @@ Expansive.load({
             render:     function(contents) {
                 let postcss = Cmd.locate('postcss')
                 if (postcss) {
-                    Cmd.run('npm install -g postcss')
+                    Cmd.run('npm install -g postcss postcss-cli autoprefixer autoprefixer-cli')
                     postcss = Cmd.locate('postcss')
                     contents = expansive.run(postcss + ' --use autoprefixer', contents)
                 } else {
