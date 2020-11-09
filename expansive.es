@@ -12,7 +12,7 @@ Expansive.load({
         force:      false,
         extract:    false,
         minify:     false,
-        prefix:     true,
+        prefix:     false,
         usemap:     true,
         usemin:     true,
 
@@ -90,9 +90,11 @@ Expansive.load({
             mappings:   'css',
             render:     function(contents) {
                 let postcss = Cmd.locate('postcss')
-                if (postcss) {
+                if (!postcss) {
                     Cmd.run('npm install -g postcss postcss-cli autoprefixer autoprefixer-cli')
-                    postcss = Cmd.locate('postcss')
+                }
+                postcss = Cmd.locate('postcss')
+                if (postcss) {
                     contents = expansive.run(postcss + ' --use autoprefixer', contents)
                 } else {
                     throw new Error('Cannot find postcss')
@@ -106,9 +108,11 @@ Expansive.load({
             render:     function(contents, meta) {
                 trace('Minify', meta.current)
                 let less = Cmd.locate('lessc')
-                if (less) {
+                if (!less) {
                     Cmd.run('npm install -g lessc')
-                    less = Cmd.locate('lessc')
+                }
+                less = Cmd.locate('lessc')
+                if (less) {
                     contents = expansive.run(less + ' --compress - ', contents, meta)
                 } else {
                     thrown new Error('Cannot find lessc')
